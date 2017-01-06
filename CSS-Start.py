@@ -1,6 +1,6 @@
 """
 CraftyStartScript
-v0.1.1
+v0.1.2
 Written by colebob9
 Python 3 Code - Released under MIT License
 
@@ -8,20 +8,8 @@ Psuedocode:
 Start server
 Keep in restart loop until recieving signal to stop the server.
 
-Maybe put in separate standalone script
-On timer, start backup process
-    `save-off`
-    `save-all`
-    Put all world and plugin data and put both in their respective .ZIP archives.
-    `save-on`
-
-
-To-Do:
-* Backups
-* Add Spigot command
-
 """
-print("CraftyStartScript v0.1.1")
+print("CraftyStartScript v0.1.2")
 
 # Configure this before using script.
 
@@ -50,7 +38,5 @@ while True:
     print("\nTo exit the script, use CTRL-C in the next %d seconds..." % (exitTimer))
     for i in range(exitTimer):
         time.sleep(1)
-        sys.stdout.write(str(i)+' ')
+        sys.stdout.write(str(exitTimer - i)+' ')
         sys.stdout.flush()
-
-    
