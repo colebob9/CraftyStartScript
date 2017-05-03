@@ -1,23 +1,37 @@
 """
 CraftyStartScript
-v0.1.2
+v0.2
 Written by colebob9
 Python 3 Code - Released under MIT License
 
-Psuedocode:
-Start server
-Keep in restart loop until recieving signal to stop the server.
+TODO:
+Launch options for Vanilla, Spigot/Bukkit, Forge, etc.
+Detect if new file
+Download extra scripts (listed below) if needed.
+Integration with CraftyPluginOrganizer for predetermined plugin installs.
+Integration with AutoBuildTools to build Spigot if needed. 
+Custom command
+
 
 """
-print("CraftyStartScript v0.1.2")
+print("CraftyStartScript v0.2")
 
-# Configure this before using script.
+# Config
 
-# Java Launch Options
-minMem = "512M"
-maxMem = "512M"
+# Simple Java Launch Options
+useSimpleCommand = True
+
+serverType = "vanilla"  # "vanilla", "spigot"
+
+minMem = "512M" # -Xms
+maxMem = "512M" # -Xmx
 jarName = "minecraft_server.1.11.2.jar"
-extraOptions = " -XX:+UseConcMarkSweepGC" # add space before if adding anything
+#extraOptions = "-XX:+UseConcMarkSweepGC"
+extraOptions = ""
+
+# Custom Launch Command
+useCustomCommand = False
+customCommand = "java -Xmx512M -Xms512M -jar minecraft_server.1.11.2.jar nogui"
 
 # Script Options
 exitTimer = 15      # in seconds
@@ -29,10 +43,24 @@ import subprocess
 import time
 import sys
 
+
+
 while True:
-    # Launch
-    print("\nLaunching server using command:\njava -Xms%s -Xmx%s%s -jar %s" % (minMem, maxMem, extraOptions, jarName))
-    subprocess.call(shlex.split("java -Xms%s -Xmx%s%s -jar %s" % (minMem, maxMem, extraOptions, jarName)))
+    if useCustomCommand:
+        launchCommand = customCommand
+    elif useSimpleCommand:
+        if serverType == "vanilla":
+            simpleCommandEnding = " nogui"
+        elif serverType == "spigot":
+            simpleCommandEnding = " -o true"
+        
+        if not extraOptions == "" or None:
+            extraOptions = extraOptions + " "
+        launchCommand = "java " + "-Xms" + minMem + " -Xmx" + maxMem + " -jar " + extraOptions + jarName + simpleCommandEnding
+    
+    print("\nLaunching server using command:\n" + launchCommand)
+    subprocess.call(shlex.split(launchCommand))
+    
     
     # Timer with countdown to ask for exit.
     print("\nTo exit the script, use CTRL-C in the next %d seconds..." % (exitTimer))
